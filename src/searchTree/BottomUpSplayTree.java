@@ -67,6 +67,13 @@ public class BottomUpSplayTree<K extends Comparable<K>, E> {
         return rightZig(c);
     }
 
+    /*Right-Right Zig-zig (RL): following conversion when given pointer to g:
+     *       g             x
+     *      /               \
+     *     p      ->         p
+     *   /                    \
+     *  x                      g
+     */
     private SearchTreeNode<K, E> rightZigZig(SearchTreeNode<K, E> node){
         SearchTreeNode<K, E> newNode =  rightZig(node);
         return rightZig(newNode);
@@ -78,10 +85,7 @@ public class BottomUpSplayTree<K extends Comparable<K>, E> {
 
     public void insert(K key, E data){
         accessPath = new Stack<>();
-        if(root != null){
-            accessPath.push(root);
-        }
-        root = insert(root, new SearchTreeNode<K, E>(key, data));
+        root = insert(root, new SearchTreeNode<>(key, data));
     }
 
     private SearchTreeNode<K, E> insert(SearchTreeNode<K, E> currentNode, SearchTreeNode<K, E> insertNode){
@@ -104,15 +108,22 @@ public class BottomUpSplayTree<K extends Comparable<K>, E> {
             System.err.println("Key already exists in Splay Tree");
             return currentNode;
         }
-
-        return splay(currentNode, insertNode);
+        System.out.println("splaying..." + insertNode.getKey());
+            return splay(currentNode, insertNode);
     }
 
-    private SearchTreeNode<K, E> splay(SearchTreeNode<K, E> currentNode, SearchTreeNode<K, E> otherNode){
-        boolean XisLeftChild = (currentNode.getKey().compareTo(otherNode.getKey()) > 0);
+    private SearchTreeNode<K, E> splay(SearchTreeNode<K, E> currentNode, SearchTreeNode<K, E> otherNode) {
 
+        System.err.println(accessPath);
+
+        boolean XisLeftChild = (currentNode.getKey().compareTo(otherNode.getKey()) > 0);
+        //check if x is root
+        if(otherNode.getKey().compareTo(root.getKey()) == 0 || currentNode.getKey().compareTo(root.getKey()) == 0){
+      //      System.out.println("CurrentNode is root");
+            return currentNode;
         //if p is root
-        if(root.getKey().equals(accessPath.peek().getKey())){
+        }else if(root.getKey().equals(accessPath.peek().getKey())){
+       //     System.out.println("p is root");
             if(XisLeftChild){
                 return rightZig(accessPath.pop());
             } else {
@@ -120,6 +131,7 @@ public class BottomUpSplayTree<K extends Comparable<K>, E> {
             }
             //otherwise check if zig-zigging or zig-zagging
         } else {
+            System.out.println("Zigging and Zagging...");
             SearchTreeNode<K, E> parent = accessPath.pop();
             SearchTreeNode<K, E> grandparent = accessPath.pop();
             if (grandparent.getKey().compareTo(parent.getKey()) > 0) {
@@ -164,5 +176,15 @@ public class BottomUpSplayTree<K extends Comparable<K>, E> {
 
             printIndexed(node.getLeft(), depth+1, false);
         }
+    }
+
+    public void printAll(){
+        printAll(root);
+    }
+
+    private void printAll(SearchTreeNode<K, E> node) {
+        System.out.println(node);
+        if(node.getLeft() != null) printAll(node.getLeft());
+        if(node.getRight() != null) printAll(node.getRight());
     }
 }
