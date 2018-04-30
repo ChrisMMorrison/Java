@@ -10,10 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 
 public class Looop extends Application{
 
@@ -32,34 +35,35 @@ public class Looop extends Application{
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Circle Sun = new Circle(50);
-        Circle Earth = new Circle(10);
-        Circle Venus = new Circle(11);
+        //Image planet = new Image("8086.png");
+
+        Body sun = new Body("sun", 0,0, 0, 0, 1.989e30, 50);
+        Body mercury = new Body("mercury", 5.79e10,0, 0, 4.79e4, 1.989e30,10);
+        Body earth = new Body("earth", 1.496e11, 0, 0, 2.98e4, 5.974e24, 10);
+
+        ArrayList<Body> bodies = new ArrayList<>();
+        bodies.add(sun);
+        bodies.add(mercury);
+        bodies.add(earth);
 
         Timeline gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-        final long timeStart = System.currentTimeMillis();
 
         KeyFrame kf = new KeyFrame(
                 Duration.seconds(0.017), //end ups being 60 FPS
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        double t = (System.currentTimeMillis() - timeStart) / 1000.0;
 
-                        double e_x = 300 + 100*Math.cos(t);
-                        double e_y = 300 + 100*Math.sin(t);
+                        for(Body body : bodies){
+                            body.update(bodies);
+                        }
+                        gc.clearRect(0, 0, 600,600);
+                        for(Body body : bodies){
+                            body.render(gc);
+                        }
 
-                        double v_x = 300 + 100*Math.cos(t-100);
-                        double v_y = 300 + 100*Math.sin(t-100);
 
-                        gc.clearRect(0,0,600,600);
-
-                        gc.fillOval(e_x - 10, e_y - 10, 20, 20);
-                        gc.fillOval(v_x - 10, v_y - 10, 20, 20);
-
-                        gc.fillOval(280, 280, 40, 40);
                     }
                 });
 
