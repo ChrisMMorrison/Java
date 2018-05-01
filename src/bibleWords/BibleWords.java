@@ -56,7 +56,7 @@ public class BibleWords {
 		//	System.err.println(i+1);
 		//}
 			
-		
+
 		System.err.println("Bible Loaded, Beginning Comparisons...");
 		Timer timer = new Timer();
 		/*
@@ -77,11 +77,11 @@ public class BibleWords {
 		}
 		
 		timer.stop();
-		
+
 		System.out.println("LinkedList2 Results: ");
 		list.printTopN(10);
 		System.out.println(timer.getTime());
-		
+		*/
 		timer.start();
 		
 		for(String token : words) {
@@ -119,7 +119,7 @@ public class BibleWords {
 		System.out.println("Hash table results:");
 		hashTable.printTopN(10);
 		System.out.println(timer.getTime());
-*/
+
 		timer.start();
 		for(String token : words) {
 				tree.add(token);
@@ -132,7 +132,7 @@ public class BibleWords {
 		tree.printTopN(10);
 		System.out.println(timer.getTime());
 
-        timer.start();
+     /*   timer.start();
         for(String token : words) {
             AVLTree.add(token);
         }
@@ -144,6 +144,6 @@ public class BibleWords {
         AVLTree.getTree().printTopN(10);
         System.out.println(timer.getTime());
 		reader.close();
-			
+			*/
 	}
 }

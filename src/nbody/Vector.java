@@ -2,43 +2,46 @@ package nbody;
 
 public class Vector {
 
-    private double xComp, yComp;
+    private ScientificNotation xComp, yComp;
 
-    public Vector(double xComp, double yComp) {
+    public Vector(ScientificNotation xComp, ScientificNotation yComp) {
         this.xComp = xComp;
         this.yComp = yComp;
     }
 
     public Vector(){
-        xComp = 0;
-        yComp = 0;
+        xComp = new ScientificNotation(0,0);
+        yComp = new ScientificNotation(0,0);
     }
 
-    public double magnitude(){
-        return Math.sqrt(Math.pow(xComp,2) + Math.pow(yComp, 2));
-    }
-
-    public double getxComp() {
+    public ScientificNotation getxComp() {
         return xComp;
     }
 
-    public void setxComp(double xComp) {
+    public void setxComp(ScientificNotation xComp) {
         this.xComp = xComp;
     }
 
-    public double getyComp() {
+    public ScientificNotation getyComp() {
         return yComp;
     }
 
-    public void setyComp(double yComp) {
+    public void setyComp(ScientificNotation yComp) {
         this.yComp = yComp;
     }
 
     public static Vector add(Vector otherVector, Vector vector){
         Vector finalVector = new Vector();
-        finalVector.setxComp(vector.getxComp() + otherVector.getxComp());
-        finalVector.setyComp(vector.getyComp() + otherVector.getyComp());
+//        System.out.println(vector.getxComp());
+//        System.out.println(otherVector.getxComp());
+        finalVector.setxComp(ScientificNotation.add(vector.getxComp(), otherVector.getxComp()));
+        finalVector.setyComp(ScientificNotation.add(vector.getyComp(), otherVector.getyComp()));
 
         return finalVector;
+    }
+
+    @Override
+    public String toString() {
+        return "X: " + xComp + " Y: " + yComp;
     }
 }

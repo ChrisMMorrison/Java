@@ -11,7 +11,7 @@ public class AVLTree <K extends Comparable<K>, E>{
     public E getData(K key){
         SearchTreeNode<K, E> node = getNode(root, key);
         if(node != null) {
-            return node.getData();
+            return node.getData(); 
         } else {
             return null;
         }

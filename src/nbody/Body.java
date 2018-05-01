@@ -11,14 +11,13 @@ public class Body {
     private Image img;
     private Vector position;
     private Vector velocity;
-    private double mass;
+    private ScientificNotation mass;
     private double radius;
 
-    public Body(String name, double positionX, double positionY, double velocityX, double velocityY, double mass, double radius){
+    public Body(String name, ScientificNotation positionX, ScientificNotation positionY, ScientificNotation velocityX, ScientificNotation velocityY, ScientificNotation mass, double radius){
         identifier = name;
        // img = image;
         position = new Vector(positionX, positionY);
-
         velocity = new Vector(velocityX, velocityY);
 
         this.mass = mass;
@@ -27,43 +26,51 @@ public class Body {
     }
 
     public void update(ArrayList<Body> allBodies){
-
         Vector acceleration = new Vector();
-
         //find velocity from superposition of gravitational forces
         for(Body body : allBodies){
             if(!body.getIdentifier().equals(identifier)){
                 acceleration = Vector.add(calculateGravitionalAcc(body), acceleration);
             }
         }
+        velocity.setxComp(ScientificNotation.add(velocity.getxComp(), ScientificNotation.mul(new ScientificNotation(1.296, 4), acceleration.getxComp())));
+        velocity.setyComp(ScientificNotation.add(velocity.getyComp(), ScientificNotation.mul(new ScientificNotation(1.296, 4), acceleration.getyComp())));
 
-        velocity.setxComp(velocity.getxComp() + 1296000*acceleration.getxComp());
-        velocity.setyComp(velocity.getyComp() + 1296000*acceleration.getyComp());
-
-        position.setxComp(position.getxComp() + 1296000*velocity.getxComp());
-        position.setyComp(position.getyComp() + 1296000*velocity.getyComp());
+        position.setxComp(ScientificNotation.add(position.getxComp(), ScientificNotation.mul(new ScientificNotation(1.296, 4), velocity.getxComp())));
+        position.setyComp(ScientificNotation.add(position.getyComp(), ScientificNotation.mul(new ScientificNotation(1.296, 4), velocity.getyComp())));
     }
 
     public Vector calculateGravitionalAcc(Body body){
         //X's then Y's
-        Vector vector = new Vector();
-        double forceX = (6.67e-11 * mass * body.getMass())/ Math.pow(position.getxComp() - body.getPosition().getxComp(),2);
-        System.out.println(6.67e-11);
-        vector.setxComp(forceX/mass);
+        Vector acc = new Vector();
 
-        double forceY = (6.67e-11 * mass * body.getMass())/ Math.pow(position.getyComp() - body.getPosition().getyComp(),2);
-        vector.setxComp(forceY/mass);
+        ScientificNotation deltaY = ScientificNotation.abs(ScientificNotation.sub(position.getyComp(), body.getPosition().getyComp()));
+        ScientificNotation deltaX = ScientificNotation.abs(ScientificNotation.sub(position.getxComp(), body.getPosition().getxComp()));
 
-        return vector;
+        ScientificNotation distance = ScientificNotation.pow(ScientificNotation.add(ScientificNotation.pow(deltaX, 2), ScientificNotation.pow(deltaY,2)),0.5);
+
+        ScientificNotation force = ScientificNotation.div(ScientificNotation.mul(ScientificNotation.mul(new ScientificNotation(6.67, -11), mass), body.getMass()),
+            ScientificNotation.pow(distance,2));
+
+        acc.setyComp(ScientificNotation.div(ScientificNotation.mul(force, ScientificNotation.div(deltaY, distance)), mass));
+        acc.setxComp(ScientificNotation.div(ScientificNotation.mul(ScientificNotation.mul(force, new ScientificNotation(-1,0)), ScientificNotation.div(deltaX, distance)), mass));
+        //System.out.println(vector);
+
+        return acc;
     }
 
     public void render(GraphicsContext gc){
-      double posX = (position.getxComp() * 600) / 2.5e11;
-      double posY = (position.getyComp() * 600) / 2.5e11;
+        ScientificNotation im = ScientificNotation.mul(position.getxComp(),new ScientificNotation(6, 2));
 
-      //gc.fillText(Double.toString(posX), 20, 20);
-     //   System.out.println(posX);
-      gc.fillOval(posX, posY, radius, radius);
+        ScientificNotation posX = ScientificNotation.div(im, new ScientificNotation(2.5, 11));
+        ScientificNotation posY = ScientificNotation.div(ScientificNotation.mul(position.getyComp(),new ScientificNotation(6, 2)), new ScientificNotation(2.5, 11));
+
+      double positionX = posX.getMantissa() * Math.pow(10, posX.getExponent());
+      double positionY = posY.getMantissa() * Math.pow(10, posY.getExponent());
+
+        System.out.println(positionX + ":" + positionY);
+
+      gc.fillOval(positionX + 200, positionY + 200, radius, radius);
     }
 
     public String getIdentifier() {
@@ -78,7 +85,7 @@ public class Body {
         return velocity;
     }
 
-    public double getMass() {
+    public ScientificNotation getMass() {
         return mass;
     }
 }

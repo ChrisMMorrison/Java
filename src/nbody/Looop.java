@@ -30,16 +30,18 @@ public class Looop extends Application{
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        Canvas canvas = new Canvas(600, 600);
+        Canvas canvas = new Canvas(1900, 1000);
         root.getChildren().add(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         //Image planet = new Image("8086.png");
 
-        Body sun = new Body("sun", 0,0, 0, 0, 1.989e30, 50);
-        Body mercury = new Body("mercury", 5.79e10,0, 0, 4.79e4, 1.989e30,10);
-        Body earth = new Body("earth", 1.496e11, 0, 0, 2.98e4, 5.974e24, 10);
+        ScientificNotation zero = new ScientificNotation(0,0);
+
+        Body sun = new Body("sun", zero,zero, zero, zero, new ScientificNotation(1.989,30), 50);
+        Body mercury = new Body("mercury", new ScientificNotation(5.79,10),zero, zero, new ScientificNotation(4.79,4), new ScientificNotation(1.989,30),10);
+        Body earth = new Body("earth", new ScientificNotation(1.496,11), zero, zero, new ScientificNotation(2.98,4), new ScientificNotation(5.974,24), 10);
 
         ArrayList<Body> bodies = new ArrayList<>();
         bodies.add(sun);
@@ -58,7 +60,7 @@ public class Looop extends Application{
                         for(Body body : bodies){
                             body.update(bodies);
                         }
-                        gc.clearRect(0, 0, 600,600);
+                       // gc.clearRect(0, 0, 600,600);
                         for(Body body : bodies){
                             body.render(gc);
                         }
