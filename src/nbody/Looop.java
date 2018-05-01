@@ -30,24 +30,26 @@ public class Looop extends Application{
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        Canvas canvas = new Canvas(1900, 1000);
+        Canvas canvas = new Canvas(1200, 800);
         root.getChildren().add(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         //Image planet = new Image("8086.png");
 
-        ScientificNotation zero = new ScientificNotation(0,0);
+      /*  ScientificNotation zero = new ScientificNotation(0,0);
 
-        Body sun = new Body("sun", zero,zero, zero, zero, new ScientificNotation(1.989,30), 50);
-        Body mercury = new Body("mercury", new ScientificNotation(5.79,10),zero, zero, new ScientificNotation(4.79,4), new ScientificNotation(1.989,30),10);
-        Body earth = new Body("earth", new ScientificNotation(1.496,11), zero, zero, new ScientificNotation(2.98,4), new ScientificNotation(5.974,24), 10);
+        Body sun = new Body(zero,zero, zero, zero, new ScientificNotation(1.989,30), "sun", 50);
+        Body mercury = new Body(new ScientificNotation(5.79,10),zero, zero, new ScientificNotation(4.79,4), new ScientificNotation(1.989,30),"mercury",10);
+        Body earth = new Body( new ScientificNotation(1.496,11), zero, zero, new ScientificNotation(2.98,4), new ScientificNotation(5.974,24), "earth",10);
 
         ArrayList<Body> bodies = new ArrayList<>();
         bodies.add(sun);
         bodies.add(mercury);
         bodies.add(earth);
-
+*/
+      BodyParser parser = new BodyParser("woah.txt");
+      ArrayList<Body> bodies = parser.parseBodies();
         Timeline gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
@@ -60,7 +62,7 @@ public class Looop extends Application{
                         for(Body body : bodies){
                             body.update(bodies);
                         }
-                       // gc.clearRect(0, 0, 600,600);
+                        gc.clearRect(0, 0, 1200,800);
                         for(Body body : bodies){
                             body.render(gc);
                         }
