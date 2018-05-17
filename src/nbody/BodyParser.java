@@ -25,13 +25,21 @@ public class BodyParser {
         while((line = reader.readLine()) != null){
             ArrayList<String> components = new ArrayList<>();
             while(line.length() > 0 ){
+                int startSpace, index;
                 if(line.indexOf(" ") == -1){
                     components.add(line);
                     line = "";
+                    startSpace = 0;
+                    index = -1;
                 } else {
-                    components.add(line.substring(0, line.indexOf(" ")));
+                    startSpace = line.indexOf(" ");
+                    index = 0;
+                    while(line.charAt(startSpace + index + 1) == ' '){
+                        index++;
+                    }
+                    components.add(line.substring(0, index + startSpace));
                 }
-                line = line.substring(line.indexOf(" ")+1,line.length());
+                line = line.substring(index+startSpace+1,line.length());
             }
             ArrayList<ScientificNotation> numbers = new ArrayList<>();
             String name ="";

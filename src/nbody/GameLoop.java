@@ -6,19 +6,22 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-public class Looop extends Application{
+public class GameLoop extends Application{
+
+    boolean dick = false;
 
     public static void main(String[]args){
         launch(args);
@@ -33,26 +36,33 @@ public class Looop extends Application{
         Canvas canvas = new Canvas(1200, 800);
         root.getChildren().add(canvas);
 
+
+
+        //setup stuff here (run once)
+        Bird bird = new Bird(10, 0);
+
+        scene.setOnMouseClicked(
+                new EventHandler<MouseEvent>()
+                {
+                    public void handle(MouseEvent e) {
+                        //code when mouse is clicked
+                        bird.jump();
+                    }
+                });
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                //code when a key is pressed
+                if(event.getCode() == KeyCode.J){
+                    bird.jump();
+                }
+            }
+        });
+
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        //Image planet = new Image("8086.png");
-
-      /*  ScientificNotation zero = new ScientificNotation(0,0);
-
-        Body sun = new Body(zero,zero, zero, zero, new ScientificNotation(1.989,30), "sun", 50);
-        Body mercury = new Body(new ScientificNotation(5.79,10),zero, zero, new ScientificNotation(4.79,4), new ScientificNotation(1.989,30),"mercury",10);
-        Body earth = new Body( new ScientificNotation(1.496,11), zero, zero, new ScientificNotation(2.98,4), new ScientificNotation(5.974,24), "earth",10);
-
-        ArrayList<Body> bodies = new ArrayList<>();
-        bodies.add(sun);
-        bodies.add(mercury);
-        bodies.add(earth);
-
-
-*/
-
-      BodyParser parser = new BodyParser("chaos.txt");
-      ArrayList<Body> bodies = parser.parseBodies();
         Timeline gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
@@ -61,15 +71,11 @@ public class Looop extends Application{
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-
-                        for(Body body : bodies){
-                            body.update(bodies);
-                        }
                         gc.clearRect(0, 0, 1200,800);
-                        for(Body body : bodies){
-                            body.render(gc);
-                        }
+                        //DO STUFF HERE (loops forever)
 
+                        bird.update();
+                        bird.render(gc);
 
                     }
                 });

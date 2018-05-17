@@ -68,7 +68,7 @@ public class Body {
 
        // System.out.println(positionX + ":" + positionY);
 
-      gc.drawImage(img,positionX + 500, positionY + 500, radius, radius);
+      gc.drawImage(img,positionX + 500 - radius/2, positionY + 500-radius/2, radius, radius);
     }
 
     public String getIdentifier() {
